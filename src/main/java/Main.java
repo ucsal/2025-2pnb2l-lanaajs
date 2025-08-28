@@ -4,15 +4,20 @@ import br.com.mariojp.solid.lspaccounts.SavingsAccount;
 
 public class Main {
     public static void main(String[] args) {
-        CheckingAccount checking = new CheckingAccount();
-        checking.deposit(100);
-        new BankService().processWithdrawal(checking, 30);
-        System.out.println("Checking balance: " + checking.getBalance()); // 70.0
 
-        SavingsAccount savings = new SavingsAccount();
-        savings.deposit(100);
-        // Estado inicial: irá lançar UnsupportedOperationException (ilustra o problema LSP).
-        new BankService().processWithdrawal(savings, 30);
-        System.out.println("Savings balance: " + savings.getBalance());
+        // Conta corrente pode sacar
+        CheckingAccount cc = new CheckingAccount();
+
+        cc.deposit(500);
+        new BankService().processWithdrawal(cc, 100);
+        System.out.println(cc.getBalance()); // 400.0
+
+        // Conta poupança - não compila se tentar passar para processWithdrawal
+        SavingsAccount poupanca = new SavingsAccount();
+        
+        poupanca.deposit(500);
+
+        // new BankService().processWithdrawal(poupanca, 100); ❌ ERRO DE COMPILAÇÃO
+        System.out.println(poupanca.getBalance()); // 500.0
     }
 }
